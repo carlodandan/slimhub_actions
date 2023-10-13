@@ -103,8 +103,6 @@ echo "Raw Disk Space Before Cleanup"
 df --sync -BM --output=pcent,used,avail /
 
 echo "Temporary Apt Cache Update"
-sudo add-apt-repository ppa:apt-fast/stable
-sudo apt-get update
 sudo apt-get -y install apt-fast
 sudo apt-fast update -qy
 
