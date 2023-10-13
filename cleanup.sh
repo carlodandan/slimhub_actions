@@ -8,11 +8,6 @@
 # Move to temporary directory
 cd "$(mktemp -d)" || exit 1
 
-if [[ ${CI} != "true" ]]; then
-  printf "This Cleanup Script Is Intended For Ubuntu Runner.\n"
-  exit 1
-fi
-
 # Make Sure The Environment Is Non-Interactive
 export DEBIAN_FRONTEND=noninteractive
 
