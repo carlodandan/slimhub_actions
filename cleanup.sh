@@ -8,7 +8,7 @@
 # Move to temporary directory
 cd "$(mktemp -d)" || exit 1
 
-if [[ ${GITHUB_ACTIONS} != "true" || ${OSTYPE} != "linux-gnu" ]]; then
+if [[ ${CI} != "true" ]]; then
   printf "This Cleanup Script Is Intended For Ubuntu Runner.\n"
   exit 1
 fi
@@ -104,32 +104,28 @@ for i in ${retain}; do
   export retain_${i}="true" && echo -e "[i] Retaining: ${i}"
 done
 
-echo "::group::<{[<]}> Raw Disk Space Before Cleanup <{[>]}>"
+echo "Raw Disk Space Before Cleanup"
 df --sync -BM --output=pcent,used,avail /
-echo "::endgroup::"
 
-echo "::group:: {[+]}  Temporary Apt Cache Update"
+echo "Temporary Apt Cache Update"
 sudo apt-fast update -qy
-echo "::endgroup::"
 
 if [[ ${retain_homebrew} != "true" ]]; then
-  echo "::group:: {[-]}  Clearing Homebrew"
+  echo "Clearing Homebrew"
   curl -sL https://raw.githubusercontent.com/Homebrew/install/master/uninstall.sh -o uninstall-brew.sh
   chmod a+x uninstall-brew.sh
   NONINTERACTIVE=1 ./uninstall-brew.sh -f -q 2>/dev/null
   sudo rm -rf -- ./uninstall-brew.sh 2>/dev/null
   export DirPurgeList+=" /home/linuxbrew"
-  echo "::endgroup::"
 fi
 
 if [[ ${retain_docker_buildkit} != "true" ]]; then
   export retain_docker_imgcache="false"
 fi
 if [[ ${retain_docker_imgcache} != "true" ]]; then
-  echo "::group:: {[-]}  Clearing Docker Image Caches"
+  echo "Clearing Docker Image Caches"
   echo -e "The Following Docker Images Is Being Purged..."
   docker rmi -f $(docker images -q) 2>/dev/null
-  echo "::endgroup::"
 fi
 if [[ ${retain_docker_buildkit} != "true" ]]; then
   export AptPurgeList+=" moby-buildx moby-cli moby-compose moby-containerd moby-engine moby-runc"
@@ -423,21 +419,19 @@ fi
 sudo apt autoclean >/dev/null || true
 sudo apt autoremove -qy 2>/dev/null || true
 sudo rm -rf /var/cache/apt/archives/ 2>/dev/null || true
-echo "::endgroup::"
 
-echo "::group:: {[-]}  Purging Unnecessary Files and Directories"
+echo "Purging Unnecessary Files and Directories"
 parallel 'echo -e "Purging {}" && sudo rm -rf -- {}' ::: ${DirPurgeList}
 # Delete broken symlinks
 sudo find /home/runner/.local/ /home/runner/ /usr/share/ /usr/bin/ /usr/local/bin/ /usr/local/share/ /usr/local/ /opt/ /snap/ -xtype l -delete 2>/dev/null
-echo "::endgroup::"
 
-echo "::group:: {[-]}  Clearing Journal Logs"
+echo "Clearing Journal Logs"
 sudo journalctl --rotate && sudo journalctl --vacuum-time=1s
 sudo find /var/log -type f -regex ".*\.gz$" -delete
 sudo find /var/log -type f -regex ".*\.[0-9]$" -delete
 sudo find /var/log/ -type f -exec sudo cp /dev/null {} \;
-echo "::endgroup::"
 
-echo "::group::<{[>]}> Free Disk Space After Cleanup <{[<]}>"
+
+echo "Free Disk Space After Cleanup"
 df --sync -BM --output=pcent,used,avail /
-echo "::endgroup::"
+
