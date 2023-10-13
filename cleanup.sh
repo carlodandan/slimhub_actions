@@ -103,7 +103,13 @@ echo "Raw Disk Space Before Cleanup"
 df --sync -BM --output=pcent,used,avail /
 
 echo "Temporary Apt Cache Update"
+sudo add-apt-repository ppa:apt-fast/stable
+sudo apt-get update
+sudo apt-get -y install apt-fast
 sudo apt-fast update -qy
+
+echo "Install parallel packages"
+sudo apt-get install parallel
 
 if [[ ${retain_homebrew} != "true" ]]; then
   echo "Clearing Homebrew"
