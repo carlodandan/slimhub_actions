@@ -343,7 +343,7 @@ fi
 export AptPurgeList+=" imagemagick imagemagick-6-common libgl1-mesa-dri firebird* hhvm "
 export DirPurgeList+=" /usr/share/firebird* /opt/hhvm /usr/share/sbt /usr/bin/sbt /usr/local/share/phantomjs* /usr/local/bin/phantomjs /usr/local/bin/packer /usr/local/lib/lein /usr/local/bin/lein /usr/local/bin/pulumi /usr/local/bin/pulumi-* /usr/share/miniconda /usr/bin/conda /usr/local/lib/heroku"
 
-echo "::group:: {[-]}  Uninstalling and Purging apt Packages"
+echo "Uninstalling and Purging apt Packages"
 
 # Case #1. List has no missing packages / essential packages
 #          All Done in Step 1
