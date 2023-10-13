@@ -137,11 +137,6 @@ if [[ ${retain_container_tools} != "true" ]]; then
   export DirPurgeList+=" /usr/local/bin/terraform"
 fi
 
-if [[ ${retain_android_sdk} != "true" ]]; then
-  export DirPurgeList+=" $(parallel -j4 echo /usr/local/lib/android/sdk/{} ::: $(ls /usr/local/lib/android/sdk/))"
-  export DirPurgeList+=" /usr/local/lib/android"
-fi
-
 if [[ ${retain_java_tools} != "true" ]]; then
   export AptPurgeList+=" temurin-*-jdk adoptopenjdk-* adoptium-ca-certificates openjdk-*"
   export retain_toolcache_java="false"
