@@ -1,9 +1,9 @@
 <div align="center">
-  <i>A Simple Composite Action to Clean GitHub Actions Workflow Environment to Bare Minimum.</i>
+  <i>A simple composite shell script to clean your cloud server (virtual machine) environment to bare minimum.</i>
 
   When you don't really need any extra software rather than core functions of Ubuntu itself, you would want to use this.
 
-  Github scripts give you a additional storage drive.
+  This scripts by [Rokib Hasan Sagar](https://github.com/rokibhasansagar) will give you a additional storage drive. Original project can be found [here](https://github.com/rokibhasansagar/slimhub_actions).
 </div>
 
 <h2>License</h2>
