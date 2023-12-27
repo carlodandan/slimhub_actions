@@ -11,6 +11,11 @@ cd "$(mktemp -d)" || exit 1
 # Make Sure The Environment Is Non-Interactive
 export DEBIAN_FRONTEND=noninteractive
 
+sudo add-apt-repository ppa:apt-fast/stable -y
+sudo apt update -y
+sudo apt install apt-fast -y
+sudo apt-get install parallel -y
+
 # Stick A Warning Message For Breaking Changes
 function _warningMsg() {
 cat <<EOBT
@@ -428,4 +433,3 @@ sudo find /var/log/ -type f -exec sudo cp /dev/null {} \;
 
 echo "Free Disk Space After Cleanup"
 df --sync -BM --output=pcent,used,avail /
-
