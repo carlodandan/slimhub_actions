@@ -11,9 +11,13 @@ cd "$(mktemp -d)" || exit 1
 # Make Sure The Environment Is Non-Interactive
 export DEBIAN_FRONTEND=noninteractive
 
+echo "Temporary Apt Cache Update"
 sudo add-apt-repository ppa:apt-fast/stable -y
-sudo apt update -y
-sudo apt install apt-fast -y
+sudo apt-get update -y
+sudo apt-get -y install apt-fast
+sudo apt-fast update -qy
+
+echo "Install parallel packages"
 sudo apt-get install parallel -y
 
 # Stick A Warning Message For Breaking Changes
@@ -106,13 +110,6 @@ done
 
 echo "Raw Disk Space Before Cleanup"
 df --sync -BM --output=pcent,used,avail /
-
-echo "Temporary Apt Cache Update"
-sudo apt-get -y install apt-fast
-sudo apt-fast update -qy
-
-echo "Install parallel packages"
-sudo apt-get install parallel
 
 if [[ ${retain_homebrew} != "true" ]]; then
   echo "Clearing Homebrew"
